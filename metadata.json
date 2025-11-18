@@ -1,0 +1,5 @@
+{
+  "name": "SP Metro Status",
+  "description": "Real-time operational status of São Paulo Metro and CPTM lines using Gemini AI.",
+  "requestFramePermissions": []
+}
