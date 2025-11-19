@@ -52,6 +52,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip external API requests - let them go through normally
+  // Only intercept requests to our own domain
+  const url = new URL(event.request.url);
+  const isExternalRequest = url.origin !== self.location.origin;
+  
+  if (isExternalRequest) {
+    // Don't intercept external requests (APIs, etc.)
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
