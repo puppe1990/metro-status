@@ -1,11 +1,14 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface GroundingSourcesProps {
   chunks: any[];
 }
 
 export const GroundingSources: React.FC<GroundingSourcesProps> = ({ chunks }) => {
+  const { t } = useLanguage();
+  
   if (!chunks || chunks.length === 0) return null;
 
   // Extract web sources. 
@@ -23,7 +26,7 @@ export const GroundingSources: React.FC<GroundingSourcesProps> = ({ chunks }) =>
     <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
       <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
         <ExternalLink className="w-4 h-4 mr-2" />
-        News Sources
+        {t.sources.title}
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {sources.map((source, idx) => (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MetroLine, LineStatus } from '../types';
 import { Check, AlertOctagon, Clock, XOctagon, Minus } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface LineCardProps {
   line: MetroLine;
@@ -8,6 +9,7 @@ interface LineCardProps {
 }
 
 export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
+  const { t } = useLanguage();
   
   const getStatusColor = (status: LineStatus) => {
     switch (status) {
@@ -26,6 +28,16 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
       case LineStatus.STOPPED: return <AlertOctagon className="w-4 h-4" />;
       case LineStatus.CLOSED: return <XOctagon className="w-4 h-4" />;
       default: return <Minus className="w-4 h-4" />;
+    }
+  };
+
+  const getStatusLabel = (status: LineStatus): string => {
+    switch (status) {
+      case LineStatus.NORMAL: return t.lineStatus.normal;
+      case LineStatus.REDUCED: return t.lineStatus.reduced;
+      case LineStatus.STOPPED: return t.lineStatus.stopped;
+      case LineStatus.CLOSED: return t.lineStatus.closed;
+      default: return t.lineStatus.unknown;
     }
   };
 
@@ -66,12 +78,12 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
              {loading ? (
                <>
                  <div className="w-4 h-4 rounded-full bg-gray-200"></div>
-                 <span>Updating...</span>
+                 <span>{t.lineStatus.updating}</span>
                </>
              ) : (
                <>
                  {getStatusIcon(line.status)}
-                 <span>{line.status}</span>
+                 <span>{getStatusLabel(line.status)}</span>
                </>
              )}
            </div>

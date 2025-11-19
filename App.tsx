@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, Info, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { RefreshCw, Info, AlertTriangle, CheckCircle, Languages } from 'lucide-react';
 import { METRO_LINES } from './constants';
 import { fetchMetroStatus } from './services/diretoDosTrensService';
 import { MetroLine, LineStatus } from './types';
 import { LineCard } from './components/LineCard';
 import { GroundingSources } from './components/GroundingSources';
+import { useLanguage } from './contexts/LanguageContext';
 
 export default function App() {
+  const { language, setLanguage, t } = useLanguage();
   const [lines, setLines] = useState<MetroLine[]>(METRO_LINES);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -34,11 +36,11 @@ export default function App() {
 
     } catch (err) {
       console.error("Failed to fetch status", err);
-      setError("Unable to retrieve live status. Displaying default information.");
+      setError(t.errors.unableToRetrieve);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   // Initial fetch on mount
   useEffect(() => {
@@ -48,8 +50,8 @@ export default function App() {
 
   const getOverallStatus = () => {
     const issues = lines.filter(l => l.status !== LineStatus.NORMAL && l.status !== LineStatus.UNKNOWN);
-    if (issues.length === 0) return { text: "All Systems Normal", color: "text-green-600", icon: CheckCircle };
-    return { text: `${issues.length} Line(s) with Issues`, color: "text-amber-600", icon: AlertTriangle };
+    if (issues.length === 0) return { text: t.status.allNormal, color: "text-green-600", icon: CheckCircle };
+    return { text: `${issues.length} ${t.status.linesWithIssues}`, color: "text-amber-600", icon: AlertTriangle };
   };
 
   const statusSummary = getOverallStatus();
@@ -74,19 +76,33 @@ export default function App() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold leading-tight text-gray-900">SP Metro Status</h1>
-              <p className="text-xs text-gray-500">Direto dos Trens</p>
+              <h1 className="text-xl font-bold leading-tight text-gray-900">{t.app.title}</h1>
+              <p className="text-xs text-gray-500">{t.app.subtitle}</p>
             </div>
           </div>
           
-          <button
-            onClick={handleFetchStatus}
-            disabled={loading}
-            className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 text-sm font-medium"
-          >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">{loading ? 'Updating...' : 'Refresh'}</span>
-          </button>
+          <div className="flex items-center space-x-3">
+            {/* Language Selector */}
+            <div className="relative group">
+              <button
+                onClick={() => setLanguage(language === 'pt' ? 'en' : 'pt')}
+                className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all text-sm font-medium"
+                title={t.app.switchLanguage}
+              >
+                <Languages className="w-4 h-4" />
+                <span className="hidden sm:inline uppercase">{language}</span>
+              </button>
+            </div>
+            
+            <button
+              onClick={handleFetchStatus}
+              disabled={loading}
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 text-sm font-medium"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">{loading ? t.app.updating : t.app.refresh}</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -102,8 +118,8 @@ export default function App() {
               <h2 className="text-lg font-semibold text-gray-900">{statusSummary.text}</h2>
               <p className="text-sm text-gray-500">
                 {lastUpdated 
-                  ? `Updated: ${lastUpdated.toLocaleTimeString()}` 
-                  : 'Waiting for update...'}
+                  ? `${t.status.updated}: ${lastUpdated.toLocaleTimeString()}` 
+                  : t.status.waitingForUpdate}
               </p>
             </div>
           </div>
@@ -130,8 +146,16 @@ export default function App() {
         <div className="flex items-start space-x-2 text-xs text-gray-400 mt-8 p-4 border-t border-gray-200">
           <Info className="w-4 h-4 flex-shrink-0" />
           <p>
-            Status information provided by <a href="https://www.diretodostrens.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">Direto dos Trens</a>. 
-            Data is updated every 60 seconds. Always verify with official Metro/CPTM channels for critical travel planning.
+            {t.disclaimer.text.split('{link}').map((part, index) => (
+              <React.Fragment key={index}>
+                {part}
+                {index === 0 && (
+                  <a href="https://www.diretodostrens.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
+                    {t.disclaimer.linkText}
+                  </a>
+                )}
+              </React.Fragment>
+            ))}
           </p>
         </div>
 
