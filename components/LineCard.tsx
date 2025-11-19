@@ -58,7 +58,7 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
           </div>
         </div>
         
-        <div className="mt-auto pt-2">
+        <div className="mt-auto pt-2 space-y-2">
            <div className={`
              flex items-center space-x-2 px-3 py-2 rounded-lg border text-sm font-medium
              ${loading ? 'animate-pulse bg-gray-50 border-gray-100 text-gray-400' : getStatusColor(line.status)}
@@ -75,6 +75,11 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
                </>
              )}
            </div>
+           {line.description && !loading && (
+             <p className="text-xs text-gray-600 leading-relaxed px-1">
+               {line.description}
+             </p>
+           )}
         </div>
       </div>
     </div>

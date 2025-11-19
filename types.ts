@@ -13,9 +13,11 @@ export interface MetroLine {
   textColor: 'text-white' | 'text-gray-900';
   status: LineStatus;
   operator: 'Metro' | 'CPTM' | 'ViaQuatro' | 'ViaMobilidade';
+  description?: string;
 }
 
 export interface StatusResponse {
   statusMap: Record<string, LineStatus>;
+  descriptions: Record<string, string>;
   sources: any[];
 }
