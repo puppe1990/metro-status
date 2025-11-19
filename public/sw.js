@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sp-metro-status-v1';
+const CACHE_NAME = 'sp-metro-status-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -54,11 +54,44 @@ self.addEventListener('fetch', (event) => {
 
   // Skip external API requests - let them go through normally
   // Only intercept requests to our own domain
-  const url = new URL(event.request.url);
-  const isExternalRequest = url.origin !== self.location.origin;
-  
-  if (isExternalRequest) {
-    // Don't intercept external requests (APIs, etc.)
+  try {
+    const url = new URL(event.request.url);
+    const requestOrigin = url.origin.toLowerCase();
+    
+    // List of external domains that should NOT be intercepted by service worker
+    const externalDomains = [
+      'diretodostrens.com.br',
+      'www.diretodostrens.com.br',
+      'googleapis.com',
+      'gstatic.com',
+      'fonts.googleapis.com',
+      'fonts.gstatic.com'
+    ];
+    
+    // Check if this is an external domain request
+    const isExternalDomain = externalDomains.some(domain => requestOrigin.includes(domain));
+    if (isExternalDomain) {
+      return; // Don't intercept external requests - let browser handle them directly
+    }
+    
+    // Get the current origin from registration scope
+    let currentOrigin = '';
+    if (self.registration && self.registration.scope) {
+      try {
+        const scopeUrl = new URL(self.registration.scope);
+        currentOrigin = scopeUrl.origin.toLowerCase();
+      } catch (e) {
+        // If we can't parse scope, be conservative and don't intercept
+        return;
+      }
+    }
+    
+    // If we have a current origin and it doesn't match the request origin, it's external
+    if (currentOrigin && requestOrigin !== currentOrigin) {
+      return; // Don't intercept external requests
+    }
+  } catch (e) {
+    // If URL parsing fails, don't intercept (safer to skip)
     return;
   }
 
