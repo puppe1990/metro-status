@@ -1,24 +1,21 @@
 import React from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 
-interface AboutPageProps {
-  onBack: () => void;
-}
-
-export const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
+export const AboutPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
     <div className="flex-grow bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <button
-          onClick={onBack}
+        <Link
+          to="/"
           className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 font-medium mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>{t.pages.back}</span>
-        </button>
+        </Link>
 
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-200/50">
           <div className="flex items-center space-x-3 mb-6">
