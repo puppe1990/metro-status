@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, Info, AlertTriangle, CheckCircle, Languages } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { RefreshCw, Info, AlertTriangle, CheckCircle, Languages, Search } from 'lucide-react';
 import { METRO_LINES } from './constants';
 import { fetchMetroStatus } from './services/diretoDosTrensService';
 import { MetroLine, LineStatus } from './types';
@@ -14,6 +14,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [groundingChunks, setGroundingChunks] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const handleFetchStatus = useCallback(async () => {
     setLoading(true);
@@ -56,6 +57,19 @@ export default function App() {
 
   const statusSummary = getOverallStatus();
   const StatusIcon = statusSummary.icon;
+
+  // Filter lines based on search query
+  const filteredLines = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return lines;
+    }
+    const query = searchQuery.toLowerCase().trim();
+    return lines.filter(line => 
+      line.name.toLowerCase().includes(query) ||
+      line.operator.toLowerCase().includes(query) ||
+      line.id.toLowerCase().includes(query)
+    );
+  }, [lines, searchQuery]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-12">
@@ -131,11 +145,31 @@ export default function App() {
           )}
         </div>
 
+        {/* Search Bar */}
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 shadow-lg border border-gray-200/50">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder={t.app.searchPlaceholder}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-gray-900 placeholder-gray-400 transition-all"
+            />
+          </div>
+        </div>
+
         {/* Grid of Lines */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {lines.map((line) => (
-            <LineCard key={line.id} line={line} loading={loading} />
-          ))}
+          {filteredLines.length > 0 ? (
+            filteredLines.map((line) => (
+              <LineCard key={line.id} line={line} loading={loading} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50">
+              <p className="text-gray-500 text-lg font-medium">{t.app.noResults}</p>
+            </div>
+          )}
         </div>
 
         {/* Sources / Disclaimer */}

@@ -8,6 +8,8 @@ export const translations = {
       refresh: 'Atualizar',
       updating: 'Atualizando...',
       switchLanguage: 'Alternar para Inglês',
+      searchPlaceholder: 'Buscar linhas...',
+      noResults: 'Nenhuma linha encontrada',
     },
     status: {
       allNormal: 'Todos os Sistemas Normais',
@@ -41,6 +43,8 @@ export const translations = {
       refresh: 'Refresh',
       updating: 'Updating...',
       switchLanguage: 'Switch to Portuguese',
+      searchPlaceholder: 'Search lines...',
+      noResults: 'No lines found',
     },
     status: {
       allNormal: 'All Systems Normal',
