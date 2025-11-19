@@ -13,11 +13,11 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
   
   const getStatusColor = (status: LineStatus) => {
     switch (status) {
-      case LineStatus.NORMAL: return 'bg-green-100 text-green-800 border-green-200';
-      case LineStatus.REDUCED: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case LineStatus.STOPPED: return 'bg-red-100 text-red-800 border-red-200';
-      case LineStatus.CLOSED: return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-50 text-gray-500 border-gray-200';
+      case LineStatus.NORMAL: return 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-green-300';
+      case LineStatus.REDUCED: return 'bg-gradient-to-r from-yellow-50 to-amber-50 text-yellow-800 border-yellow-300';
+      case LineStatus.STOPPED: return 'bg-gradient-to-r from-red-50 to-rose-50 text-red-800 border-red-300';
+      case LineStatus.CLOSED: return 'bg-gradient-to-r from-gray-50 to-slate-50 text-gray-800 border-gray-300';
+      default: return 'bg-gradient-to-r from-gray-50 to-slate-50 text-gray-500 border-gray-200';
     }
   };
 
@@ -42,53 +42,55 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col group">
       {/* Line Header */}
       <div 
-        className={`h-3 w-full`} 
+        className={`h-4 w-full relative`} 
         style={{ backgroundColor: line.colorHex }}
-      />
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      </div>
       
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-3">
-          <div>
+      <div className="p-5 sm:p-6 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1 min-w-0">
             <div 
-              className={`text-xs font-bold uppercase tracking-wider mb-1 opacity-70`}
+              className={`text-xs font-extrabold uppercase tracking-widest mb-2 opacity-80`}
               style={{ color: line.colorHex }}
             >
               {line.operator}
             </div>
-            <h3 className="text-lg font-bold text-gray-900">{line.name}</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">{line.name}</h3>
           </div>
           
           {/* Badge */}
           <div 
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm"
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg ml-3 flex-shrink-0 transform group-hover:scale-110 transition-transform"
             style={{ backgroundColor: line.colorHex }}
           >
             {line.id}
           </div>
         </div>
         
-        <div className="mt-auto pt-2 space-y-2">
+        <div className="mt-auto pt-3 space-y-3">
            <div className={`
-             flex items-center space-x-2 px-3 py-2 rounded-lg border text-sm font-medium
-             ${loading ? 'animate-pulse bg-gray-50 border-gray-100 text-gray-400' : getStatusColor(line.status)}
+             flex items-center space-x-2.5 px-4 py-3 rounded-xl border-2 text-sm font-semibold shadow-sm
+             ${loading ? 'animate-pulse bg-gray-50 border-gray-200 text-gray-400' : getStatusColor(line.status)}
            `}>
              {loading ? (
                <>
-                 <div className="w-4 h-4 rounded-full bg-gray-200"></div>
+                 <div className="w-5 h-5 rounded-full bg-gray-300 animate-pulse"></div>
                  <span>{t.lineStatus.updating}</span>
                </>
              ) : (
                <>
-                 {getStatusIcon(line.status)}
-                 <span>{getStatusLabel(line.status)}</span>
+                 <div className="flex-shrink-0">{getStatusIcon(line.status)}</div>
+                 <span className="truncate">{getStatusLabel(line.status)}</span>
                </>
              )}
            </div>
            {line.description && !loading && (
-             <p className="text-xs text-gray-600 leading-relaxed px-1">
+             <p className="text-sm text-gray-700 leading-relaxed px-1 py-2 bg-gray-50/50 rounded-lg border border-gray-100">
                {line.description}
              </p>
            )}

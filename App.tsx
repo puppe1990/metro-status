@@ -58,13 +58,13 @@ export default function App() {
   const StatusIcon = statusSummary.icon;
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-12">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <div className="bg-gray-900 text-white p-2 rounded-lg">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <header className="glass-effect border-b border-gray-200/50 sticky top-0 z-20 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <div className="bg-gradient-to-br from-gray-900 to-gray-700 text-white p-3 rounded-xl shadow-lg transform transition-transform hover:scale-105">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
                 <line x1="7" y1="2" x2="7" y2="22"></line>
                 <line x1="17" y1="2" x2="17" y2="22"></line>
@@ -76,8 +76,8 @@ export default function App() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold leading-tight text-gray-900">{t.app.title}</h1>
-              <p className="text-xs text-gray-500">{t.app.subtitle}</p>
+              <h1 className="text-2xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{t.app.title}</h1>
+              <p className="text-sm text-gray-600 font-medium">{t.app.subtitle}</p>
             </div>
           </div>
           
@@ -86,18 +86,18 @@ export default function App() {
             <div className="relative group">
               <button
                 onClick={() => setLanguage(language === 'pt' ? 'en' : 'pt')}
-                className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all text-sm font-medium"
+                className="flex items-center space-x-2 px-4 py-2.5 bg-white/80 backdrop-blur-sm text-gray-700 rounded-xl hover:bg-white hover:shadow-md transition-all text-sm font-semibold border border-gray-200/50"
                 title={t.app.switchLanguage}
               >
                 <Languages className="w-4 h-4" />
-                <span className="hidden sm:inline uppercase">{language}</span>
+                <span className="hidden sm:inline uppercase font-bold">{language}</span>
               </button>
             </div>
             
             <button
               onClick={handleFetchStatus}
               disabled={loading}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 text-sm font-medium"
+              className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 text-sm font-semibold shadow-lg hover:shadow-xl"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">{loading ? t.app.updating : t.app.refresh}</span>
@@ -106,17 +106,17 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
         {/* Overall Status Banner */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center space-x-4">
-            <div className={`p-3 rounded-full ${statusSummary.color === 'text-green-600' ? 'bg-green-100' : 'bg-amber-100'}`}>
-              <StatusIcon className={`w-8 h-8 ${statusSummary.color}`} />
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-200/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transform transition-all hover:shadow-2xl">
+          <div className="flex items-center space-x-5">
+            <div className={`p-4 rounded-2xl shadow-lg ${statusSummary.color === 'text-green-600' ? 'bg-gradient-to-br from-green-100 to-emerald-100' : 'bg-gradient-to-br from-amber-100 to-orange-100'}`}>
+              <StatusIcon className={`w-10 h-10 ${statusSummary.color}`} />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">{statusSummary.text}</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{statusSummary.text}</h2>
+              <p className="text-sm text-gray-600 font-medium">
                 {lastUpdated 
                   ? `${t.status.updated}: ${lastUpdated.toLocaleTimeString()}` 
                   : t.status.waitingForUpdate}
@@ -124,15 +124,15 @@ export default function App() {
             </div>
           </div>
           {error && (
-             <div className="px-4 py-2 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 flex items-center">
-               <AlertTriangle className="w-4 h-4 mr-2" />
+             <div className="px-5 py-3 bg-gradient-to-r from-red-50 to-rose-50 text-red-700 text-sm rounded-xl border-2 border-red-200 flex items-center shadow-md font-semibold">
+               <AlertTriangle className="w-5 h-5 mr-2" />
                {error}
              </div>
           )}
         </div>
 
         {/* Grid of Lines */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {lines.map((line) => (
             <LineCard key={line.id} line={line} loading={loading} />
           ))}
@@ -143,14 +143,14 @@ export default function App() {
           <GroundingSources chunks={groundingChunks} />
         )}
 
-        <div className="flex items-start space-x-2 text-xs text-gray-400 mt-8 p-4 border-t border-gray-200">
-          <Info className="w-4 h-4 flex-shrink-0" />
-          <p>
+        <div className="flex items-start space-x-3 text-sm text-gray-500 mt-10 p-5 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+          <Info className="w-5 h-5 flex-shrink-0 text-blue-500 mt-0.5" />
+          <p className="leading-relaxed">
             {t.disclaimer.text.split('{link}').map((part, index) => (
               <React.Fragment key={index}>
                 {part}
                 {index === 0 && (
-                  <a href="https://www.diretodostrens.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
+                  <a href="https://www.diretodostrens.com.br" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold transition-colors">
                     {t.disclaimer.linkText}
                   </a>
                 )}
