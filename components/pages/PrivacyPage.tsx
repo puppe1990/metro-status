@@ -7,8 +7,8 @@ export const PrivacyPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="flex-grow bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 w-full">
+      <div className="max-w-4xl mx-auto">
         <Link
           to="/"
           className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 font-medium mb-6 transition-colors"
@@ -110,7 +110,7 @@ export const PrivacyPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
