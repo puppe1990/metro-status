@@ -5,6 +5,7 @@ import { fetchMetroStatus } from './services/diretoDosTrensService';
 import { MetroLine, LineStatus } from './types';
 import { LineCard } from './components/LineCard';
 import { GroundingSources } from './components/GroundingSources';
+import { Footer } from './components/Footer';
 import { useLanguage } from './contexts/LanguageContext';
 
 export default function App() {
@@ -121,7 +122,7 @@ export default function App() {
   }, [lines, searchQuery, favorites]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
       {/* Header */}
       <header className="glass-effect border-b border-gray-200/50 sticky top-0 z-20 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
@@ -160,7 +161,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-grow">
         
         {/* Overall Status Banner */}
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-200/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transform transition-all hover:shadow-2xl">
@@ -240,6 +241,8 @@ export default function App() {
         </div>
 
       </main>
+
+      <Footer />
     </div>
   );
 }

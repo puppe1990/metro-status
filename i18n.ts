@@ -37,6 +37,13 @@ export const translations = {
       text: 'Informações de status fornecidas por {link}. Os dados são atualizados a cada 60 segundos. Sempre verifique com os canais oficiais do Metrô/CPTM para planejamento crítico de viagem.',
       linkText: 'Direto dos Trens',
     },
+    footer: {
+      aboutUs: 'Sobre nós',
+      termsOfUse: 'Termos de uso',
+      privacyPolicy: 'Política de privacidade',
+      contact: 'Contato',
+      rights: 'Todos os direitos reservados.',
+    },
   },
   en: {
     app: {
@@ -73,6 +80,13 @@ export const translations = {
     disclaimer: {
       text: 'Status information provided by {link}. Data is updated every 60 seconds. Always verify with official Metro/CPTM channels for critical travel planning.',
       linkText: 'Direto dos Trens',
+    },
+    footer: {
+      aboutUs: 'About Us',
+      termsOfUse: 'Terms of Use',
+      privacyPolicy: 'Privacy Policy',
+      contact: 'Contact',
+      rights: 'All rights reserved.',
     },
   },
 } as const;
