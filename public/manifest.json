@@ -1,0 +1,28 @@
+{
+  "name": "SP Metro Status",
+  "short_name": "Metro SP",
+  "description": "Status em tempo real das linhas do metrô de São Paulo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["transport", "utilities"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
+
