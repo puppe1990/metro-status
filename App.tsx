@@ -15,6 +15,41 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [groundingChunks, setGroundingChunks] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
+  // Load favorites from localStorage on mount
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('metro-status-favorites');
+    if (storedFavorites) {
+      try {
+        const favoritesArray = JSON.parse(storedFavorites);
+        setFavorites(new Set(favoritesArray));
+      } catch (e) {
+        console.error('Failed to parse favorites from localStorage', e);
+      }
+    }
+  }, []);
+
+  // Save favorites to localStorage whenever they change
+  useEffect(() => {
+    if (favorites.size > 0) {
+      localStorage.setItem('metro-status-favorites', JSON.stringify(Array.from(favorites)));
+    } else {
+      localStorage.removeItem('metro-status-favorites');
+    }
+  }, [favorites]);
+
+  const toggleFavorite = useCallback((lineId: string) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(lineId)) {
+        newFavorites.delete(lineId);
+      } else {
+        newFavorites.add(lineId);
+      }
+      return newFavorites;
+    });
+  }, []);
 
   const handleFetchStatus = useCallback(async () => {
     setLoading(true);
@@ -58,18 +93,32 @@ export default function App() {
   const statusSummary = getOverallStatus();
   const StatusIcon = statusSummary.icon;
 
-  // Filter lines based on search query
+  // Filter and sort lines based on search query and favorites
   const filteredLines = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return lines;
+    let filtered = lines;
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = lines.filter(line => 
+        line.name.toLowerCase().includes(query) ||
+        line.operator.toLowerCase().includes(query) ||
+        line.id.toLowerCase().includes(query)
+      );
     }
-    const query = searchQuery.toLowerCase().trim();
-    return lines.filter(line => 
-      line.name.toLowerCase().includes(query) ||
-      line.operator.toLowerCase().includes(query) ||
-      line.id.toLowerCase().includes(query)
-    );
-  }, [lines, searchQuery]);
+    
+    // Sort: favorites first, then by line ID
+    return [...filtered].sort((a, b) => {
+      const aIsFavorite = favorites.has(a.id);
+      const bIsFavorite = favorites.has(b.id);
+      
+      if (aIsFavorite && !bIsFavorite) return -1;
+      if (!aIsFavorite && bIsFavorite) return 1;
+      
+      // If both are favorites or both are not, sort by ID
+      return parseInt(a.id) - parseInt(b.id);
+    });
+  }, [lines, searchQuery, favorites]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 pb-12">
@@ -163,7 +212,13 @@ export default function App() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filteredLines.length > 0 ? (
             filteredLines.map((line) => (
-              <LineCard key={line.id} line={line} loading={loading} />
+              <LineCard 
+                key={line.id} 
+                line={line} 
+                loading={loading}
+                isFavorite={favorites.has(line.id)}
+                onToggleFavorite={() => toggleFavorite(line.id)}
+              />
             ))
           ) : (
             <div className="col-span-full text-center py-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50">

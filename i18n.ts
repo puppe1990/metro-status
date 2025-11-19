@@ -10,6 +10,8 @@ export const translations = {
       switchLanguage: 'Alternar para Inglês',
       searchPlaceholder: 'Buscar linhas...',
       noResults: 'Nenhuma linha encontrada',
+      addToFavorites: 'Adicionar aos favoritos',
+      removeFromFavorites: 'Remover dos favoritos',
     },
     status: {
       allNormal: 'Todos os Sistemas Normais',
@@ -45,6 +47,8 @@ export const translations = {
       switchLanguage: 'Switch to Portuguese',
       searchPlaceholder: 'Search lines...',
       noResults: 'No lines found',
+      addToFavorites: 'Add to favorites',
+      removeFromFavorites: 'Remove from favorites',
     },
     status: {
       allNormal: 'All Systems Normal',

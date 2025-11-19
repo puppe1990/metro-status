@@ -1,14 +1,16 @@
 import React from 'react';
 import { MetroLine, LineStatus } from '../types';
-import { Check, AlertOctagon, Clock, XOctagon, Minus } from 'lucide-react';
+import { Check, AlertOctagon, Clock, XOctagon, Minus, Star } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface LineCardProps {
   line: MetroLine;
   loading: boolean;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
-export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
+export const LineCard: React.FC<LineCardProps> = ({ line, loading, isFavorite, onToggleFavorite }) => {
   const { t } = useLanguage();
   
   const getStatusColor = (status: LineStatus) => {
@@ -54,21 +56,44 @@ export const LineCard: React.FC<LineCardProps> = ({ line, loading }) => {
       <div className="p-5 sm:p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1 min-w-0">
-            <div 
-              className={`text-xs font-extrabold uppercase tracking-widest mb-2 opacity-80`}
-              style={{ color: line.colorHex }}
-            >
-              {line.operator}
+            <div className="flex items-center gap-2 mb-2">
+              <div 
+                className={`text-xs font-extrabold uppercase tracking-widest opacity-80`}
+                style={{ color: line.colorHex }}
+              >
+                {line.operator}
+              </div>
+              {isFavorite && (
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              )}
             </div>
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">{line.name}</h3>
           </div>
           
-          {/* Badge */}
-          <div 
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg ml-3 flex-shrink-0 transform group-hover:scale-110 transition-transform"
-            style={{ backgroundColor: line.colorHex }}
-          >
-            {line.id}
+          <div className="flex items-center gap-2 ml-3 flex-shrink-0">
+            {/* Favorite Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleFavorite();
+              }}
+              className={`p-2 rounded-lg transition-all hover:scale-110 active:scale-95 ${
+                isFavorite 
+                  ? 'bg-yellow-50 text-yellow-500 hover:bg-yellow-100' 
+                  : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-yellow-500'
+              }`}
+              title={isFavorite ? t.app.removeFromFavorites : t.app.addToFavorites}
+            >
+              <Star className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+            </button>
+            
+            {/* Badge */}
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg transform group-hover:scale-110 transition-transform"
+              style={{ backgroundColor: line.colorHex }}
+            >
+              {line.id}
+            </div>
           </div>
         </div>
         
