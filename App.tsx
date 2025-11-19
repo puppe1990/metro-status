@@ -126,17 +126,8 @@ export default function App() {
       <header className="glass-effect border-b border-gray-200/50 sticky top-0 z-20 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <div className="bg-gradient-to-br from-gray-900 to-gray-700 text-white p-3 rounded-xl shadow-lg transform transition-transform hover:scale-105">
-              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-                <line x1="7" y1="2" x2="7" y2="22"></line>
-                <line x1="17" y1="2" x2="17" y2="22"></line>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <line x1="2" y1="7" x2="7" y2="7"></line>
-                <line x1="2" y1="17" x2="7" y2="17"></line>
-                <line x1="17" y1="17" x2="22" y2="17"></line>
-                <line x1="17" y1="7" x2="22" y2="7"></line>
-              </svg>
+            <div className="p-1 rounded-xl shadow-lg transform transition-transform hover:scale-105 flex items-center justify-center">
+              <img src="/logo.png" alt="SP Metro Status Logo" className="w-10 h-10 rounded-lg" />
             </div>
             <div>
               <h1 className="text-2xl font-bold leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{t.app.title}</h1>
