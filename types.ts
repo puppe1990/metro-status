@@ -21,3 +21,5 @@ export interface StatusResponse {
   descriptions: Record<string, string>;
   sources: any[];
 }
+
+export type Page = 'home' | 'about' | 'terms' | 'privacy' | 'contact';

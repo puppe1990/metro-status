@@ -6,10 +6,16 @@ import { MetroLine, LineStatus } from './types';
 import { LineCard } from './components/LineCard';
 import { GroundingSources } from './components/GroundingSources';
 import { Footer } from './components/Footer';
+import { AboutPage } from './components/pages/AboutPage';
+import { TermsPage } from './components/pages/TermsPage';
+import { PrivacyPage } from './components/pages/PrivacyPage';
+import { ContactPage } from './components/pages/ContactPage';
 import { useLanguage } from './contexts/LanguageContext';
+import { Page } from './types';
 
 export default function App() {
   const { language, setLanguage, t } = useLanguage();
+  const [currentPage, setCurrentPage] = useState<Page>('home');
   const [lines, setLines] = useState<MetroLine[]>(METRO_LINES);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -120,6 +126,61 @@ export default function App() {
       return parseInt(a.id) - parseInt(b.id);
     });
   }, [lines, searchQuery, favorites]);
+
+  const handleNavigation = (page: Page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToHome = () => {
+    setCurrentPage('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Render different pages
+  if (currentPage === 'about') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
+        <div className="flex-grow">
+          <AboutPage onBack={handleBackToHome} />
+        </div>
+        <Footer onNavigate={handleNavigation} />
+      </div>
+    );
+  }
+
+  if (currentPage === 'terms') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
+        <div className="flex-grow">
+          <TermsPage onBack={handleBackToHome} />
+        </div>
+        <Footer onNavigate={handleNavigation} />
+      </div>
+    );
+  }
+
+  if (currentPage === 'privacy') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
+        <div className="flex-grow">
+          <PrivacyPage onBack={handleBackToHome} />
+        </div>
+        <Footer onNavigate={handleNavigation} />
+      </div>
+    );
+  }
+
+  if (currentPage === 'contact') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
+        <div className="flex-grow">
+          <ContactPage onBack={handleBackToHome} />
+        </div>
+        <Footer onNavigate={handleNavigation} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-800 flex flex-col">
@@ -242,7 +303,7 @@ export default function App() {
 
       </main>
 
-      <Footer />
+      <Footer onNavigate={handleNavigation} />
     </div>
   );
 }
